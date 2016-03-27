@@ -52,10 +52,21 @@ filter(df, is.na(x) | x > 1)
 flights
 (dep_summer <- filter(flights, month %in% c(6,7,8)))
 (dest_houston <- filter(flights, dest == "IAH" | dest == "HOU"))
-(oper_DUA <- filter(flights, carrier %in% c("")))
-unique(flights$carrier)
-?flights
-airlines
-flights[match(flights$carrier,airlines$carrier)]
-test <- merge(flights,airlines)
-
+airlines_uniq <- unique.data.frame(airlines)
+ind <- pmatch(c("American","United","Delta"), airlines_uniq$name, nomatch = NA_integer_, duplicates.ok = FALSE)
+carrier_id <- as.character(airlines_uniq$carrier[ind])
+(oper_DUA <- filter(flights, carrier %in% carrier_id))
+(filter(flights, dep_delay > 120 | arr_delay > 120 ))
+(filter(flights, dep_delay < 0 & arr_delay > 120 ))
+(filter(flights, dep_delay > 60 & arr_delay > 120 ))
+(filter(flights, (dep_delay > 60 | arr_delay > 60 ) & air_time >  30 ) )
+(filter(flights, dep_time > 0 & dep_time < 360))
+#   arrange
+# Missing values always come at the end:
+arrange(flights, year, month, day)
+arrange(flights, desc(arr_delay))
+#   select
+select(flights, year, month, day)
+select(flights, year:day)
+select(flights, -(year:day))
+select(flights, carrier, starts_with("U"))
