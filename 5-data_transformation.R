@@ -66,7 +66,87 @@ carrier_id <- as.character(airlines_uniq$carrier[ind])
 arrange(flights, year, month, day)
 arrange(flights, desc(arr_delay))
 #   select
+#     cheatsheet
+?select
 select(flights, year, month, day)
 select(flights, year:day)
 select(flights, -(year:day))
-select(flights, carrier, starts_with("U"))
+select(flights, ends_with("delay"))
+select(flights, starts_with("dep"),  ends_with("delay"))
+
+rename(flights, tail_num = tailnum)
+
+#   mutate
+
+flights_sml <- select(flights, 
+                      year:day, 
+                      ends_with("delay"), 
+                      distance, 
+                      air_time
+)
+
+mutate(flights_sml,
+       gain = arr_delay - dep_delay,
+       hours = air_time / 60,
+       gain_per_hour = gain / hours
+)
+
+# only new variables 
+transmute(flights,
+          gain = arr_delay - dep_delay,
+          hours = air_time / 60,
+          gain_per_hour = gain / hours
+)
+
+# modulo arithmetic %/% integer division
+transmute(flights,
+          dep_time,
+          hour = dep_time %/% 100,
+          minute = dep_time %% 100
+)
+
+# use log2
+log2(2)
+#   lag and lead
+
+lead(1:10,5)
+lag(1:10,5)
+
+x <- sample(5)
+x -lag(x)
+#values change true
+x != lag(x)
+
+df <- data.frame(year = 2000:2005, value = (0:5) ^ 2)
+scrambled <- df[sample(nrow(df)), ]
+right <- mutate(scrambled, prev = lag(value, order_by = year))
+arrange(right, year)
+
+# ranking: use min_rank
+x <- c(1, 2, 2, NA, 3, 4)
+data_frame(
+  row_number(x),
+  min_rank(x),
+  dense_rank(x),
+  percent_rank(x),
+  cume_dist(x)
+) %>% knitr::kable()
+tail(flights)
+# Exercises
+#   1
+flights <- mutate(flights,
+       dep_time = 60 * (dep_time %/% 100) + dep_time %% 100,
+       air_time = 60 * (air_time %/% 100) + air_time %% 100
+)
+
+#   2
+
+transmute(flights,
+          dep_delay,
+          dep_time,
+          sched_time = dep_time + dep_delay
+          )
+library(ggplot2)
+ggplot(flights) +
+       geom_bar(mapping = aes(x = dep_time, fill = dep_time))
+       
