@@ -176,15 +176,15 @@ ggplot(data = mpg) +
 ###conclusion for ggplot
 # a data set, a geom, a set of mappings, a stat, a position adjustment, 
 #a coordinate system, and a faceting scheme.
-      # ggplot(data = <DATA>) + 
-      #   <GEOM_FUNCTION>(
-      #     mapping = aes(<MAPPINGS>),
-      #     stat = <STAT>, 
-      #     position = <POSITION>
-      #   ) +
-      #   <COORDINATE_FUNCTION> +
-      #   <FACET_FUNCTION>
-  
+# ggplot(data = <DATA>) + 
+#   <GEOM_FUNCTION>(
+#     mapping = aes(<MAPPINGS>),
+#     stat = <STAT>, 
+#     position = <POSITION>
+#   ) +
+#   <COORDINATE_FUNCTION> +
+#   <FACET_FUNCTION>
+
 ### Communication
 
 # labels
@@ -205,5 +205,5 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(mapping = aes(color = class)) +
   geom_smooth() + 
   theme_bw() 
-  
+
 
