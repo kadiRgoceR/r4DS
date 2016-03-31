@@ -3,14 +3,40 @@ library(nycflights13)
 library(ggplot2)
 library(microbenchmark)
 library(Lahman)
-flights
+
+#   Introduction data----
+# On-time data for all flights that departed NYC in 2013.
+glimpse(flights)
+# Hourly meterological data for NYC.
+weather
+# Plane metadata for all plane tailnumbers found in the FAA aircraft registry. 
+planes
+# Useful metadata about airports.
+airports
+
+#   tbl_df-----
 class(flights)
 # ! not data.frame, by subset return always tbl_df
 df2 <- data_frame(x = 1:3, y = 3:1)
 class(df2[, 1])
 class(df2[[1]]) == class(df2$x)
-#   filter----
 
+
+sfo <- filter(flights, dest == "SFO")
+sfo <- mutate(sfo,
+       date = as.Date(paste(year,month,day,sep = "-"))
+      )
+
+qplot(date, dep_delay, data = sfo)
+qplot(date, arr_delay, data = sfo)
+qplot(arr_delay, dep_delay, data = sfo)
+
+#   filter----
+filter(flights, dest %in% c("SFO", "OAK"))
+filter(flights, month == "January")
+filter(flights, dep_delay > 60 | arr_delay > 60)
+filter(flights, dep_time <= 300)
+filter(flights, arr_delay > 2 * dep_delay)
 filter(flights, month == 1 & day == 1)
 filter(flights, month == 11 | 12)
 
